@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="color_121B31">#121B31</color>
+    <color name="color_64748B">#64748B</color>
+    <color name="color_2A50D7">#2A50D7</color>
+    <color name="color_F4F6FD">#F4F6FD</color>
+    <color name="color_D4DCF7">#80D4DCF7</color>
+    <color name="color_1E293B">#1E293B</color>
+    <color name="color_CBD0D7">#CBD0D7</color>
+    <color name="color_94A3B8">#94A3B8</color>
+    <color name="color_1a797F8B">#1a797F8B</color>
+    <color name="color_797F8B">#797F8B</color>
+    <color name="color_EAEAEA">#EAEAEA</color>
+    <color name="color_FFEDD9">#FFEDD9</color>
+    <color name="color_D7D7D7">#D7D7D7</color>
+    <color name="color_57595E">#57595E</color>
+    <color name="color_F0F3FC">#F0F3FC</color>
+    <color name="color_8691B9">#8691B9</color>
+    <color name="color_2657595E">#2657595E</color>
+
+
+    <color name="primary_10">#FFF2F2</color>
+    <color name="primary_20">#FFBFC2</color>
+    <color name="primary_80">#FF666A</color>
+    <color name="primary_100">#FF0000</color>
+    <color name="primary_120">#D60F00</color>
+    <color name="primary_FF4C4C">#FF4C4C</color>
+
+
+    <color name="neutral_5">#F9FAFB</color>
+    <color name="neutral_10">#F8F9FD</color>
+    <color name="neutral_20">#E3E5E9</color>
+    <color name="neutral_80">#B5B6BC</color>
+    <color name="neutral_90">#878892</color>
+    <color name="neutral_100">#6F7076</color>
+    <color name="neutral_120">#494A4E</color>
+    <color name="neutral_130">#2C2D2F</color>
+
+
+    <color name="success_10">#EBF4EC</color>
+    <color name="success_100">#28A138</color>
+    <color name="success_130">#2D7738</color>
 </resources>

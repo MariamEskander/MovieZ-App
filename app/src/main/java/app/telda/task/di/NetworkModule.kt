@@ -8,7 +8,6 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -50,8 +49,6 @@ class NetworkModule {
     fun provideAuthenticationInterceptor(): Interceptor {
        return Interceptor {
            val request = it.request().newBuilder()
-           request.addHeader("authorization", "")
-            request.addHeader("accept", "application/json")
             val response = it.proceed(request.build())
              response
         }
