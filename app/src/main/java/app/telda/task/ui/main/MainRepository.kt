@@ -1,4 +1,4 @@
-package app.telda.task.ui
+package app.telda.task.ui.main
 
 
 import app.telda.task.base.BaseRepository

@@ -19,16 +19,22 @@ android {
     }
     buildTypes {
         def baseUrl = "baseUrl"
+        def apiKey = "apiKey"
+        def imageUrl = "imageUrl"
 
         def CONFIG = { k -> "\"${project.properties.get(k)}\"" }
 
         release {
-            buildConfigField("String", baseUrl, CONFIG("https://developers.themoviedb.org/"))
+            buildConfigField("String", baseUrl, CONFIG("server.url"))
+            buildConfigField("String", apiKey, CONFIG("apikey"))
+            buildConfigField("String", imageUrl, CONFIG("imageUrl"))
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField("String", baseUrl, CONFIG("https://developers.themoviedb.org/"))
+            buildConfigField("String", baseUrl, CONFIG("server.url"))
+            buildConfigField("String", apiKey, CONFIG("apikey"))
+            buildConfigField("String", imageUrl, CONFIG("imageUrl"))
             minifyEnabled false
             debuggable true
             signingConfig signingConfigs.debug
@@ -75,6 +81,11 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
+    //paging
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

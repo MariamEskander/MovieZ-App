@@ -39,9 +39,6 @@ abstract class BaseViewModel (private val repository: BaseRepository) : ViewMode
                         status.postValue(Status.Loading)
                         val response = apiCall.invoke()
                         when {
-                            response.code() == 206 -> {
-                                status.postValue(Status.Error(206, data = response.body()))
-                            }
                             response.code() in 200..300 -> {
                                 doOnSuccess(response.body())
                                 status.postValue(Status.Success(response.body()))
