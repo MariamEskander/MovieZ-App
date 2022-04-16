@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MovieZ</string>
+    <string name="movies_list">Movies List</string>
+</resources>
