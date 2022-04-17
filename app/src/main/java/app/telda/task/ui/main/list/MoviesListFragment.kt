@@ -80,6 +80,10 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
             binding.etSearch.setText("")
         }
 
+        binding.imgWishlist.setOnClickListener {
+            findNavController().navigate(R.id.action_list_to_wishlist)
+        }
+
         binding.imgDate.setOnClickListener {
             showDatePicker()
         }

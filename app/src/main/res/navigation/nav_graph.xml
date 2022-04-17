@@ -15,10 +15,21 @@
             app:destination="@id/movieDetailsFragment" >
             <argument app:argType="string" android:name="movieId"/>
         </action>
+
+        <action
+            android:id="@+id/action_list_to_wishlist"
+            app:destination="@id/wishlistFragment" >
+        </action>
     </fragment>
 
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="app.telda.task.ui.main.details.MovieDetailsFragment"
         tools:layout="@layout/fragment_movie_details" />
+
+    <fragment
+        android:id="@+id/wishlistFragment"
+        android:name="app.telda.task.ui.main.wishlist.WishlistFragment"
+        tools:layout="@layout/fragment_wish_list" />
+
 </navigation>
