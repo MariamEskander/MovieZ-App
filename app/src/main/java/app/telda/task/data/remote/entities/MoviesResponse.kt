@@ -20,6 +20,6 @@ data class Movie(
     @SerializedName("poster_path") var posterPath: String?,
     @SerializedName("release_date") var releaseDate: String,
     @SerializedName("tagline") var tagline: String?="",
-    @SerializedName("revenue") var revenue: Double?=0.0,
+    @SerializedName("revenue") var revenue: Int?=0,
     @SerializedName("status") var status: String?=""
 )

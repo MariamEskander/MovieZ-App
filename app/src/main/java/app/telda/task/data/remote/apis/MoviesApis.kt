@@ -1,5 +1,6 @@
 package app.telda.task.data.remote.apis
 
+import app.telda.task.data.remote.entities.CreditResponse
 import app.telda.task.data.remote.entities.Movie
 import app.telda.task.data.remote.entities.MoviesResponse
 import retrofit2.Response
@@ -36,6 +37,13 @@ interface MoviesApis {
         @Query(PAGE)  page: Int,
     ): Response<MoviesResponse>
 
+    @GET(SUB_URL_MOVIES +URL_GET_MOVIE_CREDITS)
+    suspend fun getMovieCredits(
+        @Path(ID)  id: String,
+        @Query(API_KEY)  apiKey: String
+    ): Response<CreditResponse>
+
+
 
     companion object {
         const val API_KEY = "api_key"
@@ -48,7 +56,7 @@ interface MoviesApis {
         const val URL_GET_POPULAR = "popular"
         const val URL_GET_DETAILS = "{movie_id}"
         const val URL_GET_SIMILAR = "{movie_id}/similar"
-        const val URL_GET_MOVIE_CREDITS = "get-movie-credits"
+        const val URL_GET_MOVIE_CREDITS = "{movie_id}/credits"
 
         const val URL_SEARCH = "search/movie"
     }

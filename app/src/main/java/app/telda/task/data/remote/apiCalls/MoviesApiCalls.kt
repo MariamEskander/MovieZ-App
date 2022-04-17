@@ -11,5 +11,6 @@ class MoviesApiCalls(private val apis: MoviesApis) {
 
      suspend fun getMovieDetails(id:String) = apis.getMovieDetails(id,BuildConfig.apiKey)
      suspend fun getSimilarMovies(id:String) = apis.getSimilarMovies(id,BuildConfig.apiKey,1)
+     suspend fun getMovieCredits(id:String) = apis.getMovieCredits(id,BuildConfig.apiKey)
 
 }

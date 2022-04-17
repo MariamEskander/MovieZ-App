@@ -10,5 +10,6 @@ class MovieDetailsRepository @Inject constructor (private val apiCalls: MoviesAp
 
     suspend fun getMovieDetails(id:String) = apiCalls.getMovieDetails(id)
     suspend fun getSimilarMovies(id:String) = apiCalls.getSimilarMovies(id)
+    suspend fun getMovieCredits(id:String) = apiCalls.getMovieCredits(id)
 
 }

@@ -9,4 +9,6 @@
     <string name="tagline">Tagline :</string>
     <string name="status">Status :</string>
     <string name="similar_movies">Similar Movies</string>
+    <string name="most_popular_actors">⭐️ Most popular actors</string>
+    <string name="most_popular_directors">⭐️ Most popular directors</string>
 </resources>
