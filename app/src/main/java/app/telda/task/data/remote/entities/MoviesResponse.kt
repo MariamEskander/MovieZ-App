@@ -14,13 +14,12 @@ data class MoviesResponse(
 
 data class Movie(
     @SerializedName("id") var id: String,
-    @SerializedName("original_title") var originalTitle: String,
-    @SerializedName("overview") var overview: String,
-    @SerializedName("popularity") var popularity: Double,
-    @SerializedName("poster_path") var posterPath: String?,
     @SerializedName("title") var title: String,
+    @SerializedName("overview") var overview: String,
+    @SerializedName("backdrop_path") var backdropPath: String?,
+    @SerializedName("poster_path") var posterPath: String?,
     @SerializedName("release_date") var releaseDate: String,
-    @SerializedName("video") var video: Boolean,
-    @SerializedName("vote_average") var voteAverage: Double,
-    @SerializedName("vote_count") var voteCount: Int,
+    @SerializedName("tagline") var tagline: String?="",
+    @SerializedName("revenue") var revenue: Double?=0.0,
+    @SerializedName("status") var status: String?=""
 )

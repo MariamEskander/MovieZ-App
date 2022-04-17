@@ -31,6 +31,9 @@ class MoviesPagedListAdapter(private val onMovieClickListener: SetMovieClickList
                 binding.tvYear.text = binding.itemCl.context.getString(R.string.released_at) +" "+releaseDate.toYear()
                 if (posterPath!= null)
                 binding.img.loadImage(BuildConfig.imageUrl+posterPath)
+                binding.itemCl.setOnClickListener {
+                    onMovieClicked.onMovieClicked(this,absoluteAdapterPosition)
+                }
             }
         }
 

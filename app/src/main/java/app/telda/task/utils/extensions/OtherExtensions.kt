@@ -62,6 +62,14 @@ fun String.toYear(): String {
         ""
 }
 
+fun String.toDate(): String {
+    val sdf = SimpleDateFormat("dd MMM, yyyy", Locale.getDefault())
+    return if (this.getTimeInMilliSec() != -1L)
+        sdf.format(Date(this.getTimeInMilliSec()))
+    else
+        ""
+}
+
 fun String.getTimeInMilliSec(): Long {
     val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     return try {
