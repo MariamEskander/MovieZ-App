@@ -1,19 +1,24 @@
 package app.telda.task.ui.main.list.dataSource
 
+
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import app.telda.task.data.local.database.MoviesDao
 import app.telda.task.data.remote.apiCalls.MoviesApiCalls
 import app.telda.task.data.remote.entities.Movie
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
-
 
 
 private const val STARTING_PAGE_INDEX = 1
 
 class MoviesListDataSource(
-    private val apiCalls: MoviesApiCalls
-    ) : PagingSource<Int, Movie>() {
+    private val apiCalls: MoviesApiCalls,
+    private val moviesDao: MoviesDao
+) : PagingSource<Int, Movie>() {
+
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int {
         return STARTING_PAGE_INDEX
@@ -27,6 +32,10 @@ class MoviesListDataSource(
                 return LoadResult.Error(IOException(response.errorBody().toString()))
             } else {
                 val list = response.body()?.results ?: listOf()
+                withContext(Dispatchers.IO) {
+                for (i in list)
+                    i.isFavorite = moviesDao.getMovieById(i.id) != null
+                }
                 LoadResult.Page(
                     data = list,
                     prevKey = if (page == STARTING_PAGE_INDEX) null else page,

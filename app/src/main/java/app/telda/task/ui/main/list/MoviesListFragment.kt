@@ -10,12 +10,13 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import app.telda.task.R
 import app.telda.task.data.remote.entities.Movie
 import app.telda.task.databinding.FragmentMoviesListBinding
+import app.telda.task.ui.main.list.adapter.MoviesPagedListAdapter
+import app.telda.task.ui.main.list.adapter.SetMovieClickListener
 import app.telda.task.utils.PagingLoadingStateAdapter
 import app.telda.task.utils.extensions.hideView
 import app.telda.task.utils.extensions.showView
@@ -77,6 +78,10 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
         binding.imgClear.setOnClickListener {
             year = 0
             binding.etSearch.setText("")
+        }
+
+        binding.imgWishlist.setOnClickListener {
+            findNavController().navigate(R.id.action_list_to_wishlist)
         }
 
         binding.imgDate.setOnClickListener {
@@ -151,6 +156,10 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
         val bundle = Bundle()
         bundle.putString("movieId",item.id)
         findNavController().navigate(R.id.action_list_to_details,bundle)
+    }
+
+    override fun changeFavoriteStatus(item: Movie, isFavorite: Boolean) {
+        viewModel.changeFavoriteStatus(item,isFavorite)
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,8 @@
 package app.telda.task.data.remote.entities
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class MoviesResponse(
@@ -11,15 +13,16 @@ data class MoviesResponse(
 )
 
 
-
+@Entity
 data class Movie(
-    @SerializedName("id") var id: String,
-    @SerializedName("title") var title: String,
-    @SerializedName("overview") var overview: String,
-    @SerializedName("backdrop_path") var backdropPath: String?,
-    @SerializedName("poster_path") var posterPath: String?,
-    @SerializedName("release_date") var releaseDate: String,
-    @SerializedName("tagline") var tagline: String?="",
-    @SerializedName("revenue") var revenue: Int?=0,
-    @SerializedName("status") var status: String?=""
+    @field:SerializedName("id") @PrimaryKey var id: String,
+    @field:SerializedName("title") var title: String,
+    @field:SerializedName("overview") var overview: String,
+    @field:SerializedName("backdrop_path") var backdropPath: String?,
+    @field:SerializedName("poster_path") var posterPath: String?,
+    @field:SerializedName("release_date") var releaseDate: String,
+    @field:SerializedName("tagline") var tagline: String?="",
+    @field:SerializedName("revenue") var revenue: Int?=0,
+    @field:SerializedName("status") var status: String?="",
+    @field:SerializedName("isFavorite") var isFavorite : Boolean?=false
 )
