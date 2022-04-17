@@ -45,16 +45,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/img_poster"
                 android:background="#40000000"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/img_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                app:layout_collapseMode="pin"
-                android:layout_gravity="end"
-                android:src="@drawable/ic_baseline_favorite_border_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -63,6 +53,7 @@
                 android:background="@android:color/transparent"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:layout_collapseMode="pin" />
+
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -98,15 +89,29 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/img_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:layout_gravity="end"
+                        android:src="@drawable/ic_fav"
+                        android:clickable="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:focusable="true" />
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="19dp"
                         android:layout_marginTop="13dp"
                         android:textColor="@color/color_1E293B"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/img_favorite"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="Movie Title" />

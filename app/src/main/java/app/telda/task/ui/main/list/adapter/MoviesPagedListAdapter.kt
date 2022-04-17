@@ -1,8 +1,9 @@
-package app.telda.task.ui.main.list
+package app.telda.task.ui.main.list.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import app.telda.task.BuildConfig
 import app.telda.task.R
 import app.telda.task.data.remote.entities.Movie
 import app.telda.task.databinding.ListItemMovieBinding
+import app.telda.task.utils.MyBounceInterpolator
 import app.telda.task.utils.extensions.loadImage
 import app.telda.task.utils.extensions.toYear
 
@@ -31,8 +33,26 @@ class MoviesPagedListAdapter(private val onMovieClickListener: SetMovieClickList
                 binding.tvYear.text = binding.itemCl.context.getString(R.string.released_at) +" "+releaseDate.toYear()
                 if (posterPath!= null)
                 binding.img.loadImage(BuildConfig.imageUrl+posterPath)
+                if (isFavorite == true)
+                    binding.imgFavorite.setImageResource(R.drawable.ic_fav_active)
+                else binding.imgFavorite.setImageResource(R.drawable.ic_fav)
+
+
                 binding.itemCl.setOnClickListener {
                     onMovieClicked.onMovieClicked(this,absoluteAdapterPosition)
+                }
+                binding.imgFavorite.setOnClickListener {
+                    if (isFavorite == true)
+                        binding.imgFavorite.setImageResource(R.drawable.ic_fav)
+                    else binding.imgFavorite.setImageResource(R.drawable.ic_fav_active)
+                    isFavorite = !(isFavorite ?: false)
+
+                    onMovieClicked.changeFavoriteStatus(this,isFavorite?: false)
+
+                    val myAnim = AnimationUtils.loadAnimation(binding.root.context, R.anim.bounce)
+                    val interpolator = MyBounceInterpolator(0.2, 20.0)
+                    myAnim.interpolator = interpolator
+                    binding.imgFavorite.startAnimation(myAnim)
                 }
             }
         }
@@ -67,7 +87,7 @@ class MoviesPagedListAdapter(private val onMovieClickListener: SetMovieClickList
 
 }
 
-
 interface SetMovieClickListener {
     fun onMovieClicked(item: Movie, position: Int)
+    fun changeFavoriteStatus(item: Movie, isFavorite: Boolean)
 }

@@ -24,10 +24,15 @@ class MovieDetailsViewModel @Inject constructor(private val repository: MovieDet
     val creditDataStatus = SingleLiveEvent<Status>()
     private val actors = ArrayList<Cast>()
     private val directors = ArrayList<Cast>()
+    private val favStatus = SingleLiveEvent<Status>()
+    val checkFavStatus = SingleLiveEvent<Status>()
+
 
     fun getMovieDetails(id: String) {
         performNetworkCall(
-            { repository.getMovieDetails(id) }, detailsStatus
+            { repository.getMovieDetails(id) }, detailsStatus, doOnSuccess = {
+                it?.id?.let { it1 -> isFavorite(it1) }
+            }
         )
     }
 
@@ -82,6 +87,24 @@ class MovieDetailsViewModel @Inject constructor(private val repository: MovieDet
             actors.add(i)
         if (i.department == DIRECTORS && !directors.contains(i))
             directors.add(i)
+    }
+
+    fun saveMovie(movie:Movie) {
+        performNetworkCall(
+            { repository.saveMovie(movie) }, favStatus , isDatabase = true
+        )
+    }
+
+    fun isFavorite(id: String) {
+        performNetworkCall(
+            { repository.isFavorite(id) }, checkFavStatus , isDatabase = true
+        )
+    }
+
+    fun deleteMovie(id: String) {
+        performNetworkCall(
+            { repository.deleteMovie(id) }, favStatus , isDatabase = true
+        )
     }
 
 }
