@@ -17,11 +17,11 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class MoviesListRepository @Inject constructor (
+class MoviesListRepository @Inject constructor(
     private val apiCalls: MoviesApiCalls,
     private val moviesDao: MoviesDao,
     @ApplicationContext val context: Context
-        ) : BaseRepository() {
+) : BaseRepository() {
 
     private var dataSource: SearchDataSource? = null
 
@@ -34,15 +34,16 @@ class MoviesListRepository @Inject constructor (
             pagingSourceFactory = {
                 MoviesListDataSource(
                     apiCalls,
-                    moviesDao)
+                    moviesDao
+                )
             }
         ).flow
     }
 
-    fun search(query: String,year:Int?): Flow<PagingData<Movie>> {
+    fun search(query: String, year: Int?): Flow<PagingData<Movie>> {
         dataSource?.invalidate()
 
-        dataSource = SearchDataSource(apiCalls, query, year,moviesDao)
+        dataSource = SearchDataSource(apiCalls, query, year, moviesDao)
 
         return Pager(
             config = PagingConfig(
@@ -51,7 +52,7 @@ class MoviesListRepository @Inject constructor (
             ),
             pagingSourceFactory = {
                 if (dataSource == null)
-                    SearchDataSource(apiCalls, query, year,moviesDao)
+                    SearchDataSource(apiCalls, query, year, moviesDao)
                 else dataSource!!
 
             }
@@ -59,12 +60,12 @@ class MoviesListRepository @Inject constructor (
 
     }
 
-    fun saveMovie(movie:Movie) : Response<Boolean> {
+    fun saveMovie(movie: Movie): Response<Boolean> {
         moviesDao.insertMovie(movie)
         return Response.success(true)
     }
 
-    fun deleteMovie(id: String) : Response<Boolean> {
+    fun deleteMovie(id: String): Response<Boolean> {
         moviesDao.deleteMovieById(id)
         return Response.success(true)
     }

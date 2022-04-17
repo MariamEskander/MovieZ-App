@@ -30,16 +30,17 @@ class MoviesPagedListAdapter(private val onMovieClickListener: SetMovieClickList
             Movie?.apply {
                 binding.tvTitle.text = title
                 binding.tvOverview.text = overview
-                binding.tvYear.text = binding.itemCl.context.getString(R.string.released_at) +" "+releaseDate.toYear()
-                if (posterPath!= null)
-                binding.img.loadImage(BuildConfig.imageUrl+posterPath)
+                binding.tvYear.text =
+                    binding.itemCl.context.getString(R.string.released_at) + " " + releaseDate.toYear()
+                if (posterPath != null)
+                    binding.img.loadImage(BuildConfig.imageUrl + posterPath)
                 if (isFavorite == true)
                     binding.imgFavorite.setImageResource(R.drawable.ic_fav_active)
                 else binding.imgFavorite.setImageResource(R.drawable.ic_fav)
 
 
                 binding.itemCl.setOnClickListener {
-                    onMovieClicked.onMovieClicked(this,absoluteAdapterPosition)
+                    onMovieClicked.onMovieClicked(this, absoluteAdapterPosition)
                 }
                 binding.imgFavorite.setOnClickListener {
                     if (isFavorite == true)
@@ -47,7 +48,7 @@ class MoviesPagedListAdapter(private val onMovieClickListener: SetMovieClickList
                     else binding.imgFavorite.setImageResource(R.drawable.ic_fav_active)
                     isFavorite = !(isFavorite ?: false)
 
-                    onMovieClicked.changeFavoriteStatus(this,isFavorite?: false)
+                    onMovieClicked.changeFavoriteStatus(this, isFavorite ?: false)
 
                     val myAnim = AnimationUtils.loadAnimation(binding.root.context, R.anim.bounce)
                     val interpolator = MyBounceInterpolator(0.2, 20.0)

@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import app.telda.task.BuildConfig
 import app.telda.task.R
-import app.telda.task.data.remote.entities.*
+import app.telda.task.data.remote.entities.Cast
+import app.telda.task.data.remote.entities.CreditLists
+import app.telda.task.data.remote.entities.Movie
+import app.telda.task.data.remote.entities.MoviesResponse
 import app.telda.task.databinding.FragmentMovieDetailsBinding
 import app.telda.task.ui.main.details.adapters.CastAdapter
 import app.telda.task.ui.main.details.adapters.SimilarMoviesAdapter
@@ -23,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 
 @AndroidEntryPoint
-class MovieDetailsFragment : Fragment(){
+class MovieDetailsFragment : Fragment() {
 
     private var item: Movie? = null
     private var movieId: String = ""
@@ -143,22 +146,22 @@ class MovieDetailsFragment : Fragment(){
     }
 
     private fun setCast(data: CreditLists) {
-        var list = if (data.actors.size > 5) data.actors.subList(0,5).toList()
+        val actorsList = if (data.actors.size > 5) data.actors.subList(0, 5).toList()
         else data.actors
 
-        val actorsAdapter = CastAdapter(list as ArrayList<Cast>)
+        val actorsAdapter = CastAdapter(actorsList as ArrayList<Cast>)
         binding.rvActors.adapter = actorsAdapter
 
-        list = if (data.directors.size > 5) data.directors.subList(0,5).toList()
+        val directorsList = if (data.directors.size > 5) data.directors.subList(0, 5).toList()
         else data.directors
 
-        val directorsAdapter = CastAdapter(list as ArrayList<Cast>)
+        val directorsAdapter = CastAdapter(directorsList as ArrayList<Cast>)
         binding.rvDirectors.adapter = directorsAdapter
 
     }
 
     private fun setSimilarMovies(data: MoviesResponse) {
-        val list = if (data.results.size > 5) data.results.subList(0,5).toList()
+        val list = if (data.results.size > 5) data.results.subList(0, 5).toList()
         else data.results
         val adapter = SimilarMoviesAdapter(list as ArrayList<Movie>)
         binding.rvSimilars.adapter = adapter
@@ -167,13 +170,13 @@ class MovieDetailsFragment : Fragment(){
     @SuppressLint("SetTextI18n")
     private fun setMovieDetails(data: Movie) {
         item = data
-        binding.imgPoster.loadImage(BuildConfig.imageUrl+ data.backdropPath)
+        binding.imgPoster.loadImage(BuildConfig.imageUrl + data.backdropPath)
         binding.tvTitle.text = data.title
         binding.tvOverview.text = data.overview
         binding.tvTagline.text = data.tagline
         binding.tvStatus.text = data.status
         val formatter = DecimalFormat("#,###,###")
-        binding.tvRevenue.text = (formatter.format(data.revenue?:0)).toString() + "$"
+        binding.tvRevenue.text = (formatter.format(data.revenue ?: 0)).toString() + "$"
         binding.tvYear.text = data.releaseDate.toDate()
     }
 

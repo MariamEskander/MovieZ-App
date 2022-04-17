@@ -16,13 +16,13 @@ class WishlistViewModel @Inject constructor(private val repository: WishlistRepo
 
     fun getMovies() {
         performNetworkCall(
-            { repository.getMovies() }, wishListStatus , isDatabase = true
+            { repository.getMovies() }, wishListStatus, isDatabase = true
         )
     }
 
     fun deleteMovie(id: String) {
         performNetworkCall(
-            { repository.deleteMovie(id) }, favStatus , isDatabase = true
+            { repository.deleteMovie(id) }, favStatus, isDatabase = true
         )
     }
 

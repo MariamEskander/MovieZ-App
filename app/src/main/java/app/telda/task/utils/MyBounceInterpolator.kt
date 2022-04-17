@@ -1,6 +1,7 @@
 package app.telda.task.utils
 
-internal class MyBounceInterpolator(amplitude: Double, frequency: Double) : android.view.animation.Interpolator {
+internal class MyBounceInterpolator(amplitude: Double, frequency: Double) :
+    android.view.animation.Interpolator {
     private var mAmplitude = 1.0
     private var mFrequency = 10.0
 

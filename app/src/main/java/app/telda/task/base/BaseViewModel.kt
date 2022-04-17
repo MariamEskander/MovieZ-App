@@ -15,8 +15,10 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 
-abstract class BaseViewModel (private val repository: BaseRepository,
-                              private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
+abstract class BaseViewModel(
+    private val repository: BaseRepository,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
     val showNetworkError = SingleLiveEvent<Boolean>()
 
 
@@ -35,54 +37,54 @@ abstract class BaseViewModel (private val repository: BaseRepository,
                 }
             }
         } else {
-        if (isNetworkConnected()) {
-            viewModelScope.launch {
-                withContext(ioDispatcher) {
-                    try {
-                        status.postValue(Status.Loading)
-                        val response = apiCall.invoke()
-                        when {
-                            response.code() in 200..300 -> {
-                                doOnSuccess(response.body())
-                                status.postValue(Status.Success(response.body()))
-                            }
-                            response.code() == 401 -> {
-                                status.postValue(
-                                    Status.Error(
-                                        errorCode = ERRORS.UN_AUTHORIZED
+            if (isNetworkConnected()) {
+                viewModelScope.launch {
+                    withContext(ioDispatcher) {
+                        try {
+                            status.postValue(Status.Loading)
+                            val response = apiCall.invoke()
+                            when {
+                                response.code() in 200..300 -> {
+                                    doOnSuccess(response.body())
+                                    status.postValue(Status.Success(response.body()))
+                                }
+                                response.code() == 401 -> {
+                                    status.postValue(
+                                        Status.Error(
+                                            errorCode = ERRORS.UN_AUTHORIZED
+                                        )
                                     )
-                                )
-                            }
-                            else -> {
-                                val error =
-                                    response.errorBody()?.string()
-                                        .toObjectFromJson<BaseResponse<Any?>>(BaseResponse::class.java)
-                                status.postValue(
-                                    Status.Error(
-                                        response.code(),
-                                        errorCode = ERRORS.UN_EXPECTED,
-                                        errors = error.errors
+                                }
+                                else -> {
+                                    val error =
+                                        response.errorBody()?.string()
+                                            .toObjectFromJson<BaseResponse<Any?>>(BaseResponse::class.java)
+                                    status.postValue(
+                                        Status.Error(
+                                            response.code(),
+                                            errorCode = ERRORS.UN_EXPECTED,
+                                            errors = error.errors
+                                        )
                                     )
-                                )
+                                }
                             }
-                        }
-                    } catch (e: Exception) {
-                        Log.i("error",e.toString())
-                        status.postValue(
-                            Status.Error(
-                                errorCode = ERRORS.UNKNOWN,
+                        } catch (e: Exception) {
+                            Log.i("error", e.toString())
+                            status.postValue(
+                                Status.Error(
+                                    errorCode = ERRORS.UNKNOWN,
+                                )
                             )
-                        )
+                        }
                     }
                 }
-            }
-        } else
-            status.postValue(
-                Status.Error(
-                    errorCode = ERRORS.NO_INTRERNET,
+            } else
+                status.postValue(
+                    Status.Error(
+                        errorCode = ERRORS.NO_INTRERNET,
+                    )
                 )
-            )
-    }
+        }
     }
 
     fun isNetworkConnected(): Boolean {

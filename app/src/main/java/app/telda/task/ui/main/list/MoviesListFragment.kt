@@ -107,17 +107,18 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
     }
 
     private fun showDatePicker() {
-       val picker =  DatePickerDialog(requireContext(),
+        val picker = DatePickerDialog(requireContext(),
             { p0, p1, p2, p3 ->
                 year = p1
                 if (binding.etSearch.text.trim().toString().isNotEmpty())
-                viewModel.search(binding.etSearch.text.trim().toString(), year)
-            }, if (year == 0) calendar!!.get(Calendar.YEAR) else year, month, day)
+                    viewModel.search(binding.etSearch.text.trim().toString(), year)
+            }, if (year == 0) calendar!!.get(Calendar.YEAR) else year, month, day
+        )
         picker.datePicker.findViewById<Spinner>(
-            resources.getIdentifier("day","id","android")
+            resources.getIdentifier("day", "id", "android")
         ).hideView()
         picker.datePicker.findViewById<Spinner>(
-            resources.getIdentifier("month","id","android")
+            resources.getIdentifier("month", "id", "android")
         ).hideView()
         picker.show()
 
@@ -154,12 +155,12 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
 
     override fun onMovieClicked(item: Movie, position: Int) {
         val bundle = Bundle()
-        bundle.putString("movieId",item.id)
-        findNavController().navigate(R.id.action_list_to_details,bundle)
+        bundle.putString("movieId", item.id)
+        findNavController().navigate(R.id.action_list_to_details, bundle)
     }
 
     override fun changeFavoriteStatus(item: Movie, isFavorite: Boolean) {
-        viewModel.changeFavoriteStatus(item,isFavorite)
+        viewModel.changeFavoriteStatus(item, isFavorite)
     }
 
     override fun onDestroyView() {

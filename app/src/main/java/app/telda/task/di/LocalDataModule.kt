@@ -12,21 +12,20 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalDataModule {
 
     @Provides
     @Singleton
-    fun provideConnectivityUtils(@ApplicationContext  context: Context): ConnectivityUtils {
+    fun provideConnectivityUtils(@ApplicationContext context: Context): ConnectivityUtils {
         return ConnectivityUtils(context)
     }
 
     @Provides
     @Singleton
-    fun provideMoviesDb(@ApplicationContext  context: Context)=
-         Room.databaseBuilder(context, MoviesDb::class.java, "Movies.db")
+    fun provideMoviesDb(@ApplicationContext context: Context) =
+        Room.databaseBuilder(context, MoviesDb::class.java, "Movies.db")
             .fallbackToDestructiveMigration()
             .build()
 

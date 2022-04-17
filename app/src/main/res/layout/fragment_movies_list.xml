@@ -13,7 +13,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/cl_search"
         app:layout_constraintBottom_toBottomOf="@id/cl_search"
-        android:padding="16dp"/>
+        android:padding="16dp" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search"
         android:layout_width="0dp"

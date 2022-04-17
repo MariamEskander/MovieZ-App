@@ -21,8 +21,8 @@ data class Movie(
     @field:SerializedName("backdrop_path") var backdropPath: String?,
     @field:SerializedName("poster_path") var posterPath: String?,
     @field:SerializedName("release_date") var releaseDate: String,
-    @field:SerializedName("tagline") var tagline: String?="",
-    @field:SerializedName("revenue") var revenue: Int?=0,
-    @field:SerializedName("status") var status: String?="",
-    @field:SerializedName("isFavorite") var isFavorite : Boolean?=false
+    @field:SerializedName("tagline") var tagline: String? = "",
+    @field:SerializedName("revenue") var revenue: Int? = 0,
+    @field:SerializedName("status") var status: String? = "",
+    @field:SerializedName("isFavorite") var isFavorite: Boolean? = false
 )

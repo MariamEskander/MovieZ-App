@@ -11,10 +11,10 @@ sealed class Status {
     data class Error(
         var code: Int? = 0,
         var message: String? = "",
-        var messageResourceId : Int? = null,
+        var messageResourceId: Int? = null,
         var errors: Map<String, List<String>>? = null,
-        var errorCode : ERRORS? = null,
-        var data : Any? = null
+        var errorCode: ERRORS? = null,
+        var data: Any? = null
     ) : Status()
 
     data class ErrorLoadingMore(var code: Int = 0, var message: String?) : Status()
