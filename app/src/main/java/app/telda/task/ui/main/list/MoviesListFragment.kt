@@ -10,7 +10,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import app.telda.task.R
 import app.telda.task.data.remote.entities.Movie
 import app.telda.task.databinding.FragmentMoviesListBinding
 import app.telda.task.utils.PagingLoadingStateAdapter
@@ -145,7 +148,9 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
     }
 
     override fun onMovieClicked(item: Movie, position: Int) {
-
+        val bundle = Bundle()
+        bundle.putString("movieId",item.id)
+        findNavController().navigate(R.id.action_list_to_details,bundle)
     }
 
     override fun onDestroyView() {

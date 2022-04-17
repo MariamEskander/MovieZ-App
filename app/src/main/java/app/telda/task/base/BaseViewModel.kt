@@ -1,5 +1,6 @@
 package app.telda.task.base
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.telda.task.data.remote.entities.BaseResponse
@@ -7,13 +8,15 @@ import app.telda.task.utils.ERRORS
 import app.telda.task.utils.SingleLiveEvent
 import app.telda.task.utils.Status
 import app.telda.task.utils.extensions.toObjectFromJson
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 
-abstract class BaseViewModel (private val repository: BaseRepository) : ViewModel() {
+abstract class BaseViewModel (private val repository: BaseRepository,
+                              private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
     val showNetworkError = SingleLiveEvent<Boolean>()
 
 
@@ -26,7 +29,7 @@ abstract class BaseViewModel (private val repository: BaseRepository) : ViewMode
 
         if (isDatabase == true) {
             viewModelScope.launch {
-                withContext(Dispatchers.IO) {
+                withContext(ioDispatcher) {
                     val response = apiCall.invoke()
                     status.postValue(Status.Success(response.body()))
                 }
@@ -34,7 +37,7 @@ abstract class BaseViewModel (private val repository: BaseRepository) : ViewMode
         } else {
         if (isNetworkConnected()) {
             viewModelScope.launch {
-                withContext(Dispatchers.IO) {
+                withContext(ioDispatcher) {
                     try {
                         status.postValue(Status.Loading)
                         val response = apiCall.invoke()
@@ -64,6 +67,7 @@ abstract class BaseViewModel (private val repository: BaseRepository) : ViewMode
                             }
                         }
                     } catch (e: Exception) {
+                        Log.i("error",e.toString())
                         status.postValue(
                             Status.Error(
                                 errorCode = ERRORS.UNKNOWN,
@@ -79,18 +83,6 @@ abstract class BaseViewModel (private val repository: BaseRepository) : ViewMode
                 )
             )
     }
-    }
-
-    fun doInBackground(error: (e: Exception) -> Unit = {}, block: suspend () -> Unit) {
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                try {
-                    block.invoke()
-                } catch (e: Exception) {
-                    error.invoke(e)
-                }
-            }
-        }
     }
 
     fun isNetworkConnected(): Boolean {
