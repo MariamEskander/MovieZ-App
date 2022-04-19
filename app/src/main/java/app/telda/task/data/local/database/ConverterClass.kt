@@ -19,6 +19,7 @@ class ConverterClass {
         }.type
         return gson.toJson(data, type)
     }
+
     @TypeConverter
     fun toMovie(dataString: String?): Movie? {
         if (dataString == null) {

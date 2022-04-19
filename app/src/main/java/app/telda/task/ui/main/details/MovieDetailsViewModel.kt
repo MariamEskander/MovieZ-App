@@ -11,7 +11,8 @@ import app.telda.task.utils.Constants.DIRECTORS
 import app.telda.task.utils.SingleLiveEvent
 import app.telda.task.utils.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -52,7 +53,7 @@ class MovieDetailsViewModel @Inject constructor(private val repository: MovieDet
     private suspend fun getAllCredits(list: ArrayList<Movie>) = coroutineScope {
         awaitAll({
             for (i in list)
-                getMovieCredits(i.id,i==list.last())
+                getMovieCredits(i.id, i == list.last())
         })
     }
 
@@ -67,7 +68,7 @@ class MovieDetailsViewModel @Inject constructor(private val repository: MovieDet
             { repository.getMovieCredits(id) }, creditStatus, doOnSuccess = {
                 if (it != null) {
                     for (i in it.crew) {
-                       checkItem(i)
+                        checkItem(i)
                     }
                     for (i in it.cast) {
                         checkItem(i)
@@ -75,7 +76,7 @@ class MovieDetailsViewModel @Inject constructor(private val repository: MovieDet
                     if (isLast) {
                         actors.sortByDescending { actor -> actor.popularity }
                         directors.sortByDescending { director -> director.popularity }
-                        creditDataStatus.postValue(Status.Success(CreditLists(actors, directors )))
+                        creditDataStatus.postValue(Status.Success(CreditLists(actors, directors)))
                     }
                 }
             }
@@ -89,21 +90,21 @@ class MovieDetailsViewModel @Inject constructor(private val repository: MovieDet
             directors.add(i)
     }
 
-    fun saveMovie(movie:Movie) {
+    fun saveMovie(movie: Movie) {
         performNetworkCall(
-            { repository.saveMovie(movie) }, favStatus , isDatabase = true
+            { repository.saveMovie(movie) }, favStatus, isDatabase = true
         )
     }
 
     fun isFavorite(id: String) {
         performNetworkCall(
-            { repository.isFavorite(id) }, checkFavStatus , isDatabase = true
+            { repository.isFavorite(id) }, checkFavStatus, isDatabase = true
         )
     }
 
     fun deleteMovie(id: String) {
         performNetworkCall(
-            { repository.deleteMovie(id) }, favStatus , isDatabase = true
+            { repository.deleteMovie(id) }, favStatus, isDatabase = true
         )
     }
 

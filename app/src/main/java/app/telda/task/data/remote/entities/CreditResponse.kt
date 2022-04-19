@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class CreditResponse(
     @SerializedName("id") var id: String,
     @SerializedName("cast") var cast: ArrayList<Cast>,
-    @SerializedName("crew") var crew: ArrayList<Cast>)
+    @SerializedName("crew") var crew: ArrayList<Cast>
+)
 
 data class Cast(
     @SerializedName("id") var id: String,
@@ -16,6 +17,6 @@ data class Cast(
 )
 
 data class CreditLists(
-     var actors: ArrayList<Cast>,
-     var directors: ArrayList<Cast>
+    var actors: ArrayList<Cast>,
+    var directors: ArrayList<Cast>
 )

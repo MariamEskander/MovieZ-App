@@ -9,17 +9,18 @@
         android:id="@+id/moviesListFragment"
         android:name="app.telda.task.ui.main.list.MoviesListFragment"
         tools:layout="@layout/fragment_movies_list"
-        android:label="@string/movies_list" >
+        android:label="@string/movies_list">
         <action
             android:id="@+id/action_list_to_details"
-            app:destination="@id/movieDetailsFragment" >
-            <argument app:argType="string" android:name="movieId"/>
+            app:destination="@id/movieDetailsFragment">
+            <argument
+                app:argType="string"
+                android:name="movieId" />
         </action>
 
         <action
             android:id="@+id/action_list_to_wishlist"
-            app:destination="@id/wishlistFragment" >
-        </action>
+            app:destination="@id/wishlistFragment"/>
     </fragment>
 
     <fragment

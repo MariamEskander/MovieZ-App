@@ -4,15 +4,13 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.NavHostFragment
-import app.telda.task.R
 import app.telda.task.databinding.ActivityMainBinding
 import app.telda.task.utils.extensions.launchActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MainActivity  : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     companion object {
         fun start(activity: Activity?, finish: Boolean = true) {

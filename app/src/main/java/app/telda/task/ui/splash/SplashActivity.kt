@@ -12,7 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
-class SplashActivity  : AppCompatActivity(){
+class SplashActivity : AppCompatActivity() {
 
     private lateinit var timer: CountDownTimer
 
@@ -26,7 +26,7 @@ class SplashActivity  : AppCompatActivity(){
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
         startCounter()
-   }
+    }
 
     private fun startCounter() {
         timer = object : CountDownTimer(2000, 1000) {

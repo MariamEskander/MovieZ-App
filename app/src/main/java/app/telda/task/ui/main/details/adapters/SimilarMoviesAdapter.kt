@@ -1,8 +1,8 @@
 package app.telda.task.ui.main.details.adapters
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import app.telda.task.BuildConfig
 import app.telda.task.data.remote.entities.Movie
 import app.telda.task.databinding.ItemSimilarListBinding

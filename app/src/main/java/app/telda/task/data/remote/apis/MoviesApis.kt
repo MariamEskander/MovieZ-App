@@ -10,39 +10,38 @@ import retrofit2.http.Query
 
 interface MoviesApis {
 
-    @GET(SUB_URL_MOVIES +URL_GET_POPULAR)
+    @GET(SUB_URL_MOVIES + URL_GET_POPULAR)
     suspend fun getPopularMovies(
-        @Query(API_KEY)  apiKey: String,
-        @Query(PAGE)  page: Int,
+        @Query(API_KEY) apiKey: String,
+        @Query(PAGE) page: Int,
     ): Response<MoviesResponse>
 
     @GET(URL_SEARCH)
     suspend fun search(
-        @Query(API_KEY)  apiKey: String,
-        @Query(PAGE)  page: Int,
-        @Query(QUERY)  query: String,
-        @Query(YEAR)  year: Int?,
+        @Query(API_KEY) apiKey: String,
+        @Query(PAGE) page: Int,
+        @Query(QUERY) query: String,
+        @Query(YEAR) year: Int?,
     ): Response<MoviesResponse>
 
-    @GET(SUB_URL_MOVIES +URL_GET_DETAILS)
+    @GET(SUB_URL_MOVIES + URL_GET_DETAILS)
     suspend fun getMovieDetails(
-        @Path(ID)  id: String,
-        @Query(API_KEY)  apiKey: String,
+        @Path(ID) id: String,
+        @Query(API_KEY) apiKey: String,
     ): Response<Movie>
 
-    @GET(SUB_URL_MOVIES +URL_GET_SIMILAR)
+    @GET(SUB_URL_MOVIES + URL_GET_SIMILAR)
     suspend fun getSimilarMovies(
-        @Path(ID)  id: String,
-        @Query(API_KEY)  apiKey: String,
-        @Query(PAGE)  page: Int,
+        @Path(ID) id: String,
+        @Query(API_KEY) apiKey: String,
+        @Query(PAGE) page: Int,
     ): Response<MoviesResponse>
 
-    @GET(SUB_URL_MOVIES +URL_GET_MOVIE_CREDITS)
+    @GET(SUB_URL_MOVIES + URL_GET_MOVIE_CREDITS)
     suspend fun getMovieCredits(
-        @Path(ID)  id: String,
-        @Query(API_KEY)  apiKey: String
+        @Path(ID) id: String,
+        @Query(API_KEY) apiKey: String
     ): Response<CreditResponse>
-
 
 
     companion object {

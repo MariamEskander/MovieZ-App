@@ -33,8 +33,8 @@ class MoviesListDataSource(
             } else {
                 val list = response.body()?.results ?: listOf()
                 withContext(Dispatchers.IO) {
-                for (i in list)
-                    i.isFavorite = moviesDao.getMovieById(i.id) != null
+                    for (i in list)
+                        i.isFavorite = moviesDao.getMovieById(i.id) != null
                 }
                 LoadResult.Page(
                     data = list,

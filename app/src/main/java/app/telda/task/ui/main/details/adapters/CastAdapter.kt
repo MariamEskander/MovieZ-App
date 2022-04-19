@@ -1,8 +1,8 @@
 package app.telda.task.ui.main.details.adapters
 
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import app.telda.task.BuildConfig
 import app.telda.task.data.remote.entities.Cast
 import app.telda.task.databinding.ItemCastListBinding
@@ -44,7 +44,7 @@ class CastAdapter(private var items: ArrayList<Cast>) :
 
             binding.img.loadImage(BuildConfig.imageUrl + item.profile)
             binding.tvName.text = item.name
-            binding.ratePopularity.rating = item.popularity.toFloat()/2
+            binding.ratePopularity.rating = item.popularity.toFloat() / 2
         }
     }
 
