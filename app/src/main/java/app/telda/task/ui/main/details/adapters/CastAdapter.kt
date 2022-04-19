@@ -41,7 +41,7 @@ class CastAdapter(private var items: ArrayList<Cast>) :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Cast) {
-
+            if (item.profile!= null)
             binding.img.loadImage(BuildConfig.imageUrl + item.profile)
             binding.tvName.text = item.name
             binding.ratePopularity.rating = item.popularity.toFloat() / 2

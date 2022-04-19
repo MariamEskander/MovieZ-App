@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import app.telda.task.base.BaseFragment
+import app.telda.task.base.BaseViewModel
 import app.telda.task.data.remote.entities.Movie
 import app.telda.task.databinding.FragmentWishListBinding
 import app.telda.task.utils.Status
@@ -15,11 +17,11 @@ import app.telda.task.utils.extensions.showView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WishlistFragment : Fragment(), WishListAdapter.SetMovieClickListener {
+class WishlistFragment : BaseFragment(), WishListAdapter.SetMovieClickListener {
 
     private var items: ArrayList<Movie>? = null
     private val viewModel: WishlistViewModel by viewModels()
-
+    override fun getViewModel(): BaseViewModel = viewModel
     private var _binding: FragmentWishListBinding? = null
 
     private val binding get() = _binding!!
@@ -33,28 +35,17 @@ class WishlistFragment : Fragment(), WishListAdapter.SetMovieClickListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-        setObservers()
-    }
-
-    private fun initView() {
+    override fun onViewReady() {
         viewModel.getMovies()
     }
 
-    private fun setObservers() {
+    override fun setObservers() {
         observe(viewModel.wishListStatus) { status ->
             when (status) {
-                is Status.Loading -> {
-                }
                 is Status.Success<*> -> {
-                    val data = status.data as List<Movie>?
-                    setWishList(data)
+                    setWishList(status.data as List<Movie>?)
                 }
-                else -> {
-
-                }
+                else -> {}
             }
         }
     }

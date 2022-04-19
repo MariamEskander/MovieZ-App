@@ -12,7 +12,7 @@ data class Cast(
     @SerializedName("id") var id: String,
     @SerializedName("known_for_department") var department: String,
     @SerializedName("name") var name: String,
-    @SerializedName("profile_path") var profile: String,
+    @SerializedName("profile_path") var profile: String?,
     @SerializedName("popularity") var popularity: Double
 )
 

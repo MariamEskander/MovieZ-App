@@ -41,6 +41,7 @@ class SimilarMoviesAdapter(private var items: ArrayList<Movie>) :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Movie) {
+            if (item.posterPath!= null)
             binding.img.loadImage(BuildConfig.imageUrl + item.posterPath)
         }
     }

@@ -13,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import app.telda.task.R
+import app.telda.task.base.BaseFragment
+import app.telda.task.base.BaseViewModel
 import app.telda.task.data.remote.entities.Movie
 import app.telda.task.databinding.FragmentMoviesListBinding
 import app.telda.task.ui.main.list.adapter.MoviesPagedListAdapter
@@ -27,7 +29,7 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class MoviesListFragment : Fragment(), SetMovieClickListener {
+class MoviesListFragment : BaseFragment(), SetMovieClickListener {
 
     private var calendar: Calendar? = null
     private var year: Int = 0
@@ -38,6 +40,7 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
     }
 
     private val viewModel: MoviesListViewModel by viewModels()
+    override fun getViewModel(): BaseViewModel = viewModel
 
     private var _binding: FragmentMoviesListBinding? = null
 
@@ -52,29 +55,17 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-        setObservers()
-
-    }
-
-    private fun initView() {
+    override fun onViewReady() {
         calendar = Calendar.getInstance()
         month = calendar!!.get(Calendar.MONTH)
         day = calendar!!.get(Calendar.DAY_OF_MONTH)
 
-        binding.etSearch.addTextChangedListener {
-            if (it.isNullOrEmpty()) {
-                viewModel.getPopularMovies()
-                binding.imgClear.hideView()
-            } else {
-                viewModel.search(it.trim().toString(), year)
-                binding.imgClear.showView()
-            }
-            setObservers()
-        }
+        setClickListeners()
+        setSearchEdittext()
+        setMoviesListAdapter()
+    }
 
+    private fun setClickListeners() {
         binding.imgClear.setOnClickListener {
             year = 0
             binding.etSearch.setText("")
@@ -88,6 +79,29 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
             showDatePicker()
         }
 
+        binding.tryAgainText.setOnClickListener {
+            adapter.refresh()
+        }
+    }
+
+    private fun setSearchEdittext() {
+        binding.etSearch.addTextChangedListener {
+            doRequest()
+            setObservers()
+        }
+    }
+
+    private fun doRequest() {
+        if (binding.etSearch.text.isNullOrEmpty()) {
+            viewModel.getPopularMovies()
+            binding.imgClear.hideView()
+        } else {
+            viewModel.search(binding.etSearch.text.trim().toString(), year)
+            binding.imgClear.showView()
+        }
+    }
+
+    private fun setMoviesListAdapter() {
         binding.rv.adapter = adapter.withLoadStateHeaderAndFooter(
             header = PagingLoadingStateAdapter { adapter.retry() },
             footer = PagingLoadingStateAdapter { adapter.retry() },
@@ -95,6 +109,12 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
 
         viewLifecycleOwner.lifecycleScope.launch {
             adapter.loadStateFlow.collectLatest { loadState ->
+                if (loadState.refresh is LoadState.Loading) {
+                    showDialogLoading()
+                    binding.noDataLayout.hideView()
+                    binding.rv.hideView()
+                    binding.errorLayout.hideView()
+                }else hideDialogLoading()
                 if (loadState.refresh is LoadState.Error) {
                     showErrorView()
                 } else if (loadState.source.refresh is LoadState.NotLoading && loadState.append.endOfPaginationReached && adapter.itemCount < 1) {
@@ -106,9 +126,21 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
         }
     }
 
+    override fun setObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.listData.collectLatest { data ->
+                adapter.submitData(viewLifecycleOwner.lifecycle, data)
+            }
+            viewModel.searchData.collectLatest { data ->
+                adapter.submitData(viewLifecycleOwner.lifecycle, data)
+            }
+        }
+    }
+
     private fun showDatePicker() {
-        val picker = DatePickerDialog(requireContext(),
-            { p0, p1, p2, p3 ->
+        val picker = DatePickerDialog(
+            requireContext(),
+            { _, p1, _, _ ->
                 year = p1
                 if (binding.etSearch.text.trim().toString().isNotEmpty())
                     viewModel.search(binding.etSearch.text.trim().toString(), year)
@@ -124,20 +156,8 @@ class MoviesListFragment : Fragment(), SetMovieClickListener {
 
     }
 
-    private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.listData.collectLatest { data ->
-                adapter.submitData(viewLifecycleOwner.lifecycle, data)
-            }
-            viewModel.searchData.collectLatest { data ->
-                adapter.submitData(viewLifecycleOwner.lifecycle, data)
-            }
-        }
-
-    }
-
     private fun showErrorView() {
-        binding.errorLayout.showView()
+            binding.errorLayout.showView()
     }
 
     private fun showEmptyView() {

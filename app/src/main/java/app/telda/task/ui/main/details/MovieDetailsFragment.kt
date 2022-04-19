@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import app.telda.task.BuildConfig
 import app.telda.task.R
+import app.telda.task.base.BaseFragment
+import app.telda.task.base.BaseViewModel
 import app.telda.task.data.remote.entities.Cast
 import app.telda.task.data.remote.entities.CreditLists
 import app.telda.task.data.remote.entities.Movie
@@ -19,14 +20,12 @@ import app.telda.task.ui.main.details.adapters.CastAdapter
 import app.telda.task.ui.main.details.adapters.SimilarMoviesAdapter
 import app.telda.task.utils.MyBounceInterpolator
 import app.telda.task.utils.Status
-import app.telda.task.utils.extensions.loadImage
-import app.telda.task.utils.extensions.observe
-import app.telda.task.utils.extensions.toDate
+import app.telda.task.utils.extensions.*
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 
 @AndroidEntryPoint
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment : BaseFragment() {
 
     private var item: Movie? = null
     private var movieId: String = ""
@@ -35,6 +34,7 @@ class MovieDetailsFragment : Fragment() {
     private var _binding: FragmentMovieDetailsBinding? = null
 
     private val binding get() = _binding!!
+    override fun getViewModel(): BaseViewModel = viewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,79 +45,111 @@ class MovieDetailsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-        setObservers()
-    }
-
-    private fun initView() {
+    override fun onViewReady() {
         arguments?.let {
             movieId = arguments?.getString("movieId") ?: ""
             viewModel.getMovieDetails(movieId)
-            viewModel.getSimilarMovies(movieId)
         }
-
     }
 
-    private fun setObservers() {
+    override fun setObservers() {
         observe(viewModel.detailsStatus) { status ->
             when (status) {
                 is Status.Loading -> {
+                    binding.nsv.hideView()
+                    binding.appbar.hideView()
+                    binding.errorLayout.hideView()
+                    showDialogLoading()
                 }
                 is Status.Success<*> -> {
-                    val data = status.data as Movie
-                    setMovieDetails(data)
+                    hideDialogLoading()
+                    setMovieDetails(status.data as Movie)
+                    viewModel.getSimilarMovies(movieId)
 
                 }
-                else -> {
-
+                is Status.Error -> {
+                    hideDialogLoading()
+                    showErrorView()
+                    showErrorMsg(status.message)
                 }
+                else -> {}
             }
         }
 
         observe(viewModel.similarStatus) { status ->
             when (status) {
-                is Status.Loading -> {
-                }
                 is Status.Success<*> -> {
-                    val data = status.data as MoviesResponse
-                    setSimilarMovies(data)
+                    setSimilarMovies(status.data as MoviesResponse)
                 }
-                else -> {
-
-                }
+                else -> {}
             }
         }
 
         observe(viewModel.creditDataStatus) { status ->
             when (status) {
-                is Status.Loading -> {
-                }
                 is Status.Success<*> -> {
-                    val data = status.data as CreditLists
-                    setCast(data)
+                    setCast(status.data as CreditLists)
                 }
-                else -> {
-
-                }
+                else -> {}
             }
         }
 
         observe(viewModel.checkFavStatus) { status ->
             when (status) {
-                is Status.Loading -> {
-                }
                 is Status.Success<*> -> {
                     val data = status.data as Movie?
                     item?.isFavorite = data != null
                     setFavorite()
                 }
-                else -> {
-
-                }
+                else -> {}
             }
         }
+
+    }
+
+    private fun showErrorView() {
+        binding.nsv.hideView()
+        binding.appbar.hideView()
+        binding.errorLayout.showView()
+        binding.tryAgainText.setOnClickListener {
+            viewModel.getMovieDetails(movieId)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setMovieDetails(data: Movie) {
+        binding.appbar.showView()
+        binding.nsv.showView()
+        item = data
+        binding.imgPoster.loadImage(BuildConfig.imageUrl + data.backdropPath)
+        binding.tvTitle.text = data.title
+        binding.tvOverview.text = data.overview
+        binding.tvTagline.text = data.tagline
+        binding.tvStatus.text = data.status
+        val formatter = DecimalFormat("#,###,###")
+        binding.tvRevenue.text = (formatter.format(data.revenue ?: 0)).toString() + "$"
+        binding.tvYear.text = data.releaseDate.toDate()
+    }
+
+    private fun setSimilarMovies(data: MoviesResponse) {
+        val list = if (data.results.size > 5) data.results.subList(0, 5).toList()
+        else data.results
+        val adapter = SimilarMoviesAdapter(list as ArrayList<Movie>)
+        binding.rvSimilars.adapter = adapter
+    }
+
+    private fun setCast(data: CreditLists) {
+        val actorsList = if (data.actors.size > 5) data.actors.subList(0, 5).toList()
+        else data.actors
+
+        val actorsAdapter = CastAdapter(actorsList as ArrayList<Cast>)
+        binding.rvActors.adapter = actorsAdapter
+
+        val directorsList = if (data.directors.size > 5) data.directors.subList(0, 5).toList()
+        else data.directors
+
+        val directorsAdapter = CastAdapter(directorsList as ArrayList<Cast>)
+        binding.rvDirectors.adapter = directorsAdapter
 
     }
 
@@ -143,41 +175,6 @@ class MovieDetailsFragment : Fragment() {
             myAnim.interpolator = interpolator
             binding.imgFavorite.startAnimation(myAnim)
         }
-    }
-
-    private fun setCast(data: CreditLists) {
-        val actorsList = if (data.actors.size > 5) data.actors.subList(0, 5).toList()
-        else data.actors
-
-        val actorsAdapter = CastAdapter(actorsList as ArrayList<Cast>)
-        binding.rvActors.adapter = actorsAdapter
-
-        val directorsList = if (data.directors.size > 5) data.directors.subList(0, 5).toList()
-        else data.directors
-
-        val directorsAdapter = CastAdapter(directorsList as ArrayList<Cast>)
-        binding.rvDirectors.adapter = directorsAdapter
-
-    }
-
-    private fun setSimilarMovies(data: MoviesResponse) {
-        val list = if (data.results.size > 5) data.results.subList(0, 5).toList()
-        else data.results
-        val adapter = SimilarMoviesAdapter(list as ArrayList<Movie>)
-        binding.rvSimilars.adapter = adapter
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setMovieDetails(data: Movie) {
-        item = data
-        binding.imgPoster.loadImage(BuildConfig.imageUrl + data.backdropPath)
-        binding.tvTitle.text = data.title
-        binding.tvOverview.text = data.overview
-        binding.tvTagline.text = data.tagline
-        binding.tvStatus.text = data.status
-        val formatter = DecimalFormat("#,###,###")
-        binding.tvRevenue.text = (formatter.format(data.revenue ?: 0)).toString() + "$"
-        binding.tvYear.text = data.releaseDate.toDate()
     }
 
     override fun onDestroyView() {
