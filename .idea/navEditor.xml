@@ -36,12 +36,17 @@
                                 <LayoutPositions />
                               </value>
                             </entry>
+                            <entry key="action_list_to_wishlist">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="wishFragment">
+                  <entry key="wishlistFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">

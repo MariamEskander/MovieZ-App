@@ -19,4 +19,5 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("app.telda.task", appContext.packageName)
     }
+
 }
